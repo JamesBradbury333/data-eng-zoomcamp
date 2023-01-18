@@ -1,9 +1,4 @@
 # Database for week 1  containing Taxi Data
-#
-# Database type: PostgreSQL
-# Database name: ny_taxi
-# Database username: root
-# Database password: root
 
 version: '3.1'
 
@@ -14,8 +9,8 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./ny_taxi_postgres_data:/var/lib/postgresql/data
+      - ./ny_taxi_postgres_data_volume:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
       POSTGRES_DB: ny_taxi
