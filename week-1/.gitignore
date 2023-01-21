@@ -2,3 +2,4 @@
 .ipynb_checkpoints/
 database/ny_taxi_postgres_data/
 database/yellow_tripdata_2021-01.csv.gz
+database/ny_taxi_postgres_data_volume
