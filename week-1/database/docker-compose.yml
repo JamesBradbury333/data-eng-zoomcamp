@@ -1,4 +1,6 @@
 # Database for week 1  containing Taxi Data
+# pgadmin allows us to access the database through a web browser
+# on localhost port 8080, user: admin@admin.com,  password: password
 
 version: '3.1'
 
@@ -9,8 +11,23 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./ny_taxi_postgres_data_volume:/var/lib/postgresql/data
+      - ny_taxi_postgres_data_volume:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       POSTGRES_DB: ny_taxi
+
+# Add a persistent volume to save login details
+  pgadmin:
+    image: dpage/pgadmin4
+    volumes:
+      - pgadmin_conn_data:/var/lib/pgadmin:rw
+    ports:
+      - 8080:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=password
+
+volumes:
+  pgadmin_conn_data:
+  ny_taxi_postgres_data_volume:
