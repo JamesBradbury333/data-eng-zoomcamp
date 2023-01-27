@@ -1,0 +1,4 @@
+.terrafrom-version
+.terrafrom.lock.hcl
+terrafrom.tfstate
+terrafrom.tfstate.backup
