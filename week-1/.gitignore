@@ -1,6 +1,13 @@
 .ipynb_checkpoints/
 python_docker_sql/database/ny_taxi_postgres_data/
-# database/yellow_tripdata_2021-01.csv.gz
 python_docker_sql/database/ny_taxi_postgres_data_volume
 python_docker_sql/database/yellow_tripdata_2021-01.csv
 python_docker_sql/database/taxi_zone_lookup.csv
+**/ny_taxi_postgres_data/*
+*.tfstate
+*.tfstate.*
+**.terraform
+**.terraform.lock.*
+**logs/
+**.env
+**google_credentials.json
