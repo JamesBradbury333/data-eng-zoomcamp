@@ -26,7 +26,7 @@ def main(params):
 
     # import the csv
     # could potentially download each time but no need
-    df = pd.read_csv("database/yellow_tripdata_2021-01.csv", nrows=100)
+    df = pd.read_csv(csv_name, nrows=100)
 
     df.tpep_pickup_datetime = pd.to_datetime(df.tpep_pickup_datetime)
     df.tpep_dropoff_datetime = pd.to_datetime(df.tpep_dropoff_datetime)
