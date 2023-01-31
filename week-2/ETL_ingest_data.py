@@ -18,7 +18,7 @@ def main():
     host = "localhost"
     port = "5432"
     db = "ny_taxi"
-    table_name = "yellow_taxi_trips-week2"
+    table_name = "yellow_taxi_trips_week2"
     csv_path = "week-1/python_docker_sql/database/yellow_tripdata_2021-01.csv"
     print(os.getcwd())
 
