@@ -10,7 +10,7 @@ import psycopg2
 import os
 
 # TODO: Set up a logger
-# TODO: Look at reading in data in chunks but in a better way than week-1   
+# TODO: Look at reading in data in chunks but in a better way than week-1
 @flow(name="Ingest Data")
 def main():
     user = "postgres"
@@ -36,12 +36,14 @@ def extract_data(csv_path):
     df = pd.read_csv(csv_path)
     return df
 
+
 @task(name="Transform-Taxi-Data", log_prints=True, retries=3)
 def transform_data(df: pd.DataFrame):
     print("Converting datetime columns to datetime types")
     df.tpep_pickup_datetime = pd.to_datetime(df.tpep_pickup_datetime)
     df.tpep_dropoff_datetime = pd.to_datetime(df.tpep_dropoff_datetime)
     return df
+
 
 @task(name="Load-Taxi-Data", log_prints=True, retries=3)
 def load_data(db_engine, db_tablename: str, df: pd.DataFrame):
