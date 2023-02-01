@@ -9,26 +9,34 @@ from prefect import flow, task
 from prefect.tasks import task_input_hash
 from time import time
 from datetime import timedelta
+from prefect_sqlalchemy import SqlAlchemyConnector
 
 
 # TODO: Set up a logger
 # TODO: Look at reading in data in chunks but in a better way than week-1
 @flow(name="Ingest Data")
 def main():
-    user = "postgres"
-    password = "password"
-    host = "localhost"
-    port = "5432"
-    db = "ny_taxi"
-    table_name = "yellow_taxi_trips_week2"
-    csv_path = "week-1/python_docker_sql/database/yellow_tripdata_2021-01.csv"
-    db_engine_url = f"postgresql://{user}:{password}@{host}:{port}/{db}"
-    db_engine = create_engine(db_engine_url)
+    # These parameters are replaced by creating a connection block within
+    # the prefect dashboard-server which defines the db details
 
-    raw_data = extract_data(csv_path)
-    clean_data = transform_data(raw_data)
-    load_data(db_engine, table_name, clean_data)
-    print("ETL job completed successfully!")
+    # user = "postgres"
+    # password = "password"
+    # host = "localhost"
+    # port = "5432"
+    # db = "ny_taxi"
+    # db_engine_url = f"postgresql://{user}:{password}@{host}:{port}/{db}"
+    # db_engine = create_engine(db_engine_url)
+    
+    csv_path = "week-1/python_docker_sql/database/yellow_tripdata_2021-01.csv"
+    table_name = "yellow_taxi_trips_week2"
+
+
+    with SqlAlchemyConnector.load("postgres-ny-taxi-connector") as database_block:
+        db_engine = database_block.get_connection(begin=False)
+        raw_data = extract_data(csv_path)
+        clean_data = transform_data(raw_data)
+        load_data(db_engine, table_name, clean_data)
+        print("ETL job completed successfully!")
 
 
 @task(
