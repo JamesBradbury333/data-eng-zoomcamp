@@ -6,8 +6,10 @@
 import pandas as pd
 from sqlalchemy import create_engine
 from prefect import flow, task
-import psycopg2
-import os
+from prefect.tasks import task_input_hash
+from time import time
+from datetime import timedelta
+
 
 # TODO: Set up a logger
 # TODO: Look at reading in data in chunks but in a better way than week-1
@@ -20,17 +22,22 @@ def main():
     db = "ny_taxi"
     table_name = "yellow_taxi_trips_week2"
     csv_path = "week-1/python_docker_sql/database/yellow_tripdata_2021-01.csv"
-    print(os.getcwd())
-
     db_engine_url = f"postgresql://{user}:{password}@{host}:{port}/{db}"
     db_engine = create_engine(db_engine_url)
-    data = extract_data(csv_path)
-    transformed_data = transform_data(data)
-    load_data(db_engine, table_name, transformed_data)
+
+    raw_data = extract_data(csv_path)
+    clean_data = transform_data(raw_data)
+    load_data(db_engine, table_name, clean_data)
     print("ETL job completed successfully!")
 
 
-@task(name="Extract-Taxi-Data", log_prints=True, retries=3)
+@task(
+    name="Extract-Taxi-Data",
+    log_prints=True,
+    retries=3,
+    cache_key_fn=task_input_hash,
+    cache_expiration=timedelta(days=1),
+)
 def extract_data(csv_path):
     print(f"Loading file: {csv_path}")
     df = pd.read_csv(csv_path)
@@ -39,6 +46,11 @@ def extract_data(csv_path):
 
 @task(name="Transform-Taxi-Data", log_prints=True, retries=3)
 def transform_data(df: pd.DataFrame):
+    print("Removing trips with zero passengers")
+    print(f"pre: missing passenger count: {df['passenger_count'].isin([0]).sum()}")
+    df = df[df["passenger_count"] != 0]
+    print(f"post: missing passenger count: {df['passenger_count'].isin([0]).sum()}")
+
     print("Converting datetime columns to datetime types")
     df.tpep_pickup_datetime = pd.to_datetime(df.tpep_pickup_datetime)
     df.tpep_dropoff_datetime = pd.to_datetime(df.tpep_dropoff_datetime)
