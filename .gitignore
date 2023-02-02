@@ -1,4 +1,3 @@
-.vscode/settings.json
 .ipynb_checkpoints/
 week-1/python_docker_sql/database/ny_taxi_postgres_data/
 week-1/python_docker_sql/database/ny_taxi_postgres_data_volume
