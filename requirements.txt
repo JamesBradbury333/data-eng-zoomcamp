@@ -3,3 +3,5 @@ prefect==2.7.10
 prefect-sqlalchemy==0.2.2
 psycopg2==2.9.3
 SQLAlchemy==1.4.46
+fastparquet==2023.1.0
+"prefect_gcp[cloud_storage]"
