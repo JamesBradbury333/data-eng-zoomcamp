@@ -4,6 +4,7 @@ from prefect import flow, task
 from prefect_gcp.cloud_storage import GcsBucket
 
 
+# TODO: Add seciton in the README.md ???
 @task(retries=3, log_prints="True")
 def fetch(dataset_url: str) -> pd.DataFrame:
     """Read Taxi data from web into pandas DataFrame."""
@@ -26,23 +27,22 @@ def clean(df=pd.DataFrame) -> pd.DataFrame:
 
 @task(log_prints="True")
 def write_local(df: pd.DataFrame, localpath: Path) -> None:
-    """Write DataFrame as a parquet file"""
+    """Write DataFrame as a parquet file."""
     df.to_parquet(localpath, compression="gzip")
     return
 
+
 @task()
 def write_gcs(from_path: Path, to_path: str) -> None:
-    """Uploading local parquet file to google cloud storage"""
+    """Uploading local parquet file to google cloud storage."""
     gcp_block = GcsBucket.load("zoom-gcs")
-    gcp_block.upload_from_path(
-        from_path=from_path, to_path=to_path
-    )
+    gcp_block.upload_from_path(from_path=from_path, to_path=to_path)
     return
 
 
 @flow(log_prints="True")
 def etl_web_to_gs() -> None:
-    """The main ETL function."""
+    """Main ETL function."""
     colour = "yellow"
     year = 2021
     month = 1
