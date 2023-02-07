@@ -29,3 +29,11 @@ from prefect_sqlalchemy import SqlAlchemyConnector
 with SqlAlchemyConnector.load("postgres-ny-taxi-connector") as database_block:
 
 ```
+
+## Load Data into GCP Bucket.
+```bash
+$ python week-2/gcp/etl_web_to_gcs.py 
+```
+This loads yellow_taxi .csv data from a url hosted by DataTalksClub into a GCP bucket.
+Data is saved locally as .parquet and is then uploaded to the GCP bucket with the same file path but in the cloud rather than locally. 
+* GCP Credentials named "zoom-gcp-credentials" have been created in GCP console and have been added as a Block in Prefect Orion. Prefect Orion dashboard server must be up so that the credentials can be read in. 
