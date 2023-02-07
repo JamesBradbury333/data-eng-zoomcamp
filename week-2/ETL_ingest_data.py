@@ -12,27 +12,18 @@ from datetime import timedelta
 from prefect_sqlalchemy import SqlAlchemyConnector
 
 
-# TODO: Set up a logger
+# TODO: Set up a loggerE
 # TODO: Look at reading in data in chunks but in a better way than week-1
 @flow(name="Ingest Data")
 def main():
-    # These parameters are replaced by creating a connection block within
-    # the prefect dashboard-server which defines the db details
-
-    # user = "postgres"
-    # password = "password"
-    # host = "localhost"
-    # port = "5432"
-    # db = "ny_taxi"
-    # db_engine_url = f"postgresql://{user}:{password}@{host}:{port}/{db}"
-    # db_engine = create_engine(db_engine_url)
-    
     csv_path = "week-1/python_docker_sql/database/yellow_tripdata_2021-01.csv"
-    table_name = "yellow_taxi_trips_week2"
+    table_name = "yellow_taxi_trips_week-2"
 
-
+    # TODO: This isn't working. Think it is to do with prefect library being broken
+    # The context manager breaks down saying it needs to be done asynchronously
+    # though this is how to do it according to prefect docs.
     with SqlAlchemyConnector.load("postgres-ny-taxi-connector") as database_block:
-        db_engine = database_block.get_connection(begin=False)
+        db_engine = database_block.get_connection()
         raw_data = extract_data(csv_path)
         clean_data = transform_data(raw_data)
         load_data(db_engine, table_name, clean_data)

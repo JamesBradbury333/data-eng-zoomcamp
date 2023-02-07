@@ -1,6 +1,9 @@
 # Week 2
 
 ## Ingest Data into db
+
+### <mark>This script is broken atm. Prefect docs provide code to use a context manager when creating a db_connection. Error is arising with saying 'asynch' context manager must be used instead. Problem with prefect not the script I think.</mark>
+## 
 Spin up docker database from week-1 then: 
 ```bash
 $ python week-2/ETL_ingest_data.py
