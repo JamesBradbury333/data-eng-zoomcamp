@@ -29,11 +29,24 @@ from prefect_sqlalchemy import SqlAlchemyConnector
 with SqlAlchemyConnector.load("postgres-ny-taxi-connector") as database_block:
 
 ```
+## Prefect Orion GCP Credentials Block
+Go into Prefect Dashboard and Create a GCP block there (requires the pip/conda installation of "prefect_gcp[cloud_storage]" --> in requirements.txt). For a given IAM role in the console you can download a .json key and paste it into Prefect Orion to create the Block. Prefect Orion provides python code for accessing the credentials from the script.
 
-## Load Data into GCP Bucket.
+
+## Load Data from web host into GCP Bucket.
 ```bash
 $ python week-2/gcp/etl_web_to_gcs.py 
 ```
 This loads yellow_taxi .csv data from a url hosted by DataTalksClub into a GCP bucket.
 Data is saved locally as .parquet and is then uploaded to the GCP bucket with the same file path but in the cloud rather than locally. 
 * GCP Credentials named "zoom-gcp-credentials" have been created in GCP console and have been added as a Block in Prefect Orion. Prefect Orion dashboard server must be up so that the credentials can be read in. 
+
+## Load Data From GCP Bucket into BigQuery (GoogleSQL) table.
+<mark> make sure the project_id is correct --> I spent ages in IAM premissions docs when infact I was trying to upload data to someone elses project </mark>  
+
+``` bash
+$ python week-2/gcp/etl_gcs_to_bq.py
+```
+* Uses GCP Credentials named "zoom-gcp-credentials" stored in Prefect Orion.
+* Needs a to be a role with "BigQuery Admin" and "Storage Admin" permisions.
+* Needs "ride" BigQuery table already created.
