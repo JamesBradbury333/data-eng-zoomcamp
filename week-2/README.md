@@ -68,3 +68,23 @@ You can monitor the progress of a flow run in the CLI using the prefect agent
 $ prefect agent start --work-queue "default"
 ```
 This show you the progress of the work queue "default". You can create other work queues and attach flows to them.
+
+## Building a Flow using a DockerContainer
+Need to set prefcet congfig api_address so docker container can interact with prefect orion server
+``` bash
+$ prefect config set PREFECT_API_URL="http://127.0.0.1:4200/api"
+```
+
+Create a DockerFile containing parameterized_flow.py script and Build it:
+``` bash
+$ docker image build -t docker-username/prefect:de-zoom .
+```
+Publish the image to your docker hub:
+``` bash
+$ docker image push  jamesbradbury222/prefect:de-zoom .
+```
+Now you can go into Prefect Orion Deployments and set up a Docker Deployment.
+Running the script docker_deploy.py creates the new deployment:
+``` bash
+$ python docker_deploy.py
+``` 

@@ -14,3 +14,4 @@ week-1/python_docker_sql/database/green_tripdata_2019-01.csv
 **google_credentials.json  # if google google_credentials are stored as json rather then env var this stops them fro being included
 .vscode/
 week-2/data/
+*/__pycache__/
