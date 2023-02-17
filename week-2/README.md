@@ -50,3 +50,21 @@ $ python week-2/gcp/etl_gcs_to_bq.py
 * Uses GCP Credentials named "zoom-gcp-credentials" stored in Prefect Orion.
 * Needs a to be a role with "BigQuery Admin" and "Storage Admin" permisions.
 * Needs "ride" BigQuery table already created.
+
+## Building a Flow to run on a schedule.
+Requires a script.
+``` bash
+$ prefect deployment build flow week-2/gcp/parameterized_flow.py
+```
+This builds a .yaml file in the root with a recipe for running a flow at regular intervals. Cron schedules etc can be added. Works by cloning everything below working directory so data-volumes with permssion restircitions can cause issues. There is a .prefectignore file which can help with this. You can specify which parameters you want to run the flow with or just run with default.
+
+After updating the .yaml you can update the flow using
+``` bash
+$ prefect deployment apply etl_parent_flow-deployment.yaml
+```
+
+You can monitor the progress of a flow run in the CLI using the prefect agent
+``` bash
+$ prefect agent start --work-queue "default"
+```
+This show you the progress of the work queue "default". You can create other work queues and attach flows to them.
